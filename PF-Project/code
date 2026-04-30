@@ -1,1 +1,80 @@
+// Motor Pins
+const int IN1 = 2;
+const int IN2 = 3;
+const int IN3 = 4;
+const int IN4 = 5;
 
+// Ultrasonic Pins
+const int trigPin = 6;
+const int echoPin = 7;
+
+long duration;
+int distance;
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+
+  // Trigger ultrasonic sensor
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read echo
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance
+  distance = duration * 0.034 / 2;
+
+  // Obstacle detection
+  if (distance > 0 && distance < 20) {
+    stopMotors();
+    delay(300);
+
+    turnRight();
+    delay(600);
+  }
+  else {
+    moveForward();
+  }
+
+  delay(100);
+}
+
+// Move Forward
+void moveForward() {
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+// Turn Right
+void turnRight() {
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+// Stop Motors
+void stopMotors() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
